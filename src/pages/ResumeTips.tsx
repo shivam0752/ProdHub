@@ -2,9 +2,7 @@ import { useState } from 'react'
 import { FileText, AlertTriangle, Target, ShieldCheck, FileCode, Copy, Check, X, ExternalLink } from 'lucide-react'
 
 const LATEX_TEMPLATE = `%-------------------------
-% Resume in Latex
-% Author : Aarav Mehta
-% License : MIT
+
 %------------------------
 
 \\documentclass[letterpaper,10pt]{article}
@@ -75,7 +73,7 @@ const LATEX_TEMPLATE = `%-------------------------
 %----------HEADING----------
 \\begin{center}
     \\textbf{\\Huge \\scshape Aarav Mehta} \\\\ \\vspace{1pt}
-    \\small Bengaluru, India $|$ \\href{mailto:aarav.mehta@email.com}{aarav.mehta@email.com} $|$ +91 98765 43210 $|$ \\href{https://linkedin.com/in/aaravmehta}{linkedin.com/in/aaravmehta}
+    \\small Bengaluru, India $|$ \\href{mailto:aa****a@email.com}{aa****@email.com} $|$ +91 98765 43210 $|$ \\href{https://linkedin.com/in/YOUR_ID}{linkedin.com/in/YOUR_ID}
 \\end{center}
 
 
@@ -318,7 +316,7 @@ export default function ResumeTips() {
             <div className="text-[11px] font-mono text-neutral-500 flex flex-wrap justify-center gap-2 sm:gap-3">
               <span>Bengaluru, India</span>
               <span className="hidden sm:inline">•</span>
-              <span>aarav.mehta@email.com</span>
+              <span>aa****a@email.com</span>
               <span className="hidden sm:inline">•</span>
               <span>+91 98765 43210</span>
               <span className="hidden sm:inline">•</span>
@@ -408,15 +406,15 @@ export default function ResumeTips() {
       {showLatexModal && (
         <>
           {/* Backdrop overlay */}
-          <div 
+          <div
             className="fixed inset-0 bg-neutral-900/50 backdrop-blur-xs z-50 transition-opacity"
             onClick={() => setShowLatexModal(false)}
           />
-          
+
           {/* Modal Container */}
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
             <div className="bg-neutral-0 border border-neutral-200 rounded-card w-full max-w-3xl shadow-xl flex flex-col max-h-[85vh] animate-slide-in-right overflow-hidden">
-              
+
               {/* Modal Header */}
               <div className="flex items-center justify-between border-b border-neutral-100 px-5 py-4 shrink-0">
                 <div className="flex items-center gap-2">
@@ -425,7 +423,7 @@ export default function ResumeTips() {
                     LaTeX Resume Template Source
                   </h3>
                 </div>
-                <button 
+                <button
                   onClick={() => setShowLatexModal(false)}
                   className="text-neutral-400 hover:text-neutral-900 p-1.5 rounded-md hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-brand-accent transition-all duration-fast cursor-pointer animate-fade-in"
                 >
@@ -435,7 +433,7 @@ export default function ResumeTips() {
 
               {/* Modal Body */}
               <div className="p-5 overflow-y-auto space-y-5 flex-1 font-body text-xs sm:text-sm text-neutral-600">
-                
+
                 {/* Intro / Action bar */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-neutral-50 border border-neutral-200 p-4 rounded-lg">
                   <p className="text-xs text-neutral-600 max-w-md leading-relaxed">
