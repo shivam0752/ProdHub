@@ -1,7 +1,10 @@
 import { supabase, isSupabaseConfigured } from './supabaseClient'
 import { useAuthStore } from '../store/authStore'
 
-export async function logAnalyticsEvent(eventName: 'tool_viewed' | 'resource_clicked' | 'resource_submitted' | 'rating_submitted', properties: Record<string, any> = {}) {
+export async function logAnalyticsEvent(
+  eventName: 'tool_viewed' | 'resource_clicked' | 'resource_submitted' | 'rating_submitted' | 'feedback_submitted', 
+  properties: Record<string, any> = {}
+) {
   const user = useAuthStore.getState().user
   const userId = user?.id || null
 
