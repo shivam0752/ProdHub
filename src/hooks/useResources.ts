@@ -27,7 +27,7 @@ export interface ResourceSuggestion {
 }
 
 // Seeded local resources fallback if Supabase is empty
-const SEEDED_RESOURCES: Resource[] = [
+export const SEEDED_RESOURCES: Resource[] = [
   {
     "id": "res-how-to-kickstart-your-pm-career",
     "type": "link",
