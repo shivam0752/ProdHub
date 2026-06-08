@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   BarChart2,
   TrendingUp,
@@ -13,6 +13,8 @@ import {
   BookOpen,
   Layers,
   Hash,
+  ArrowLeft,
+  Printer,
 } from 'lucide-react'
 
 // ─────────────────────────────────────────────
@@ -377,7 +379,7 @@ function ApmConceptCard({ c, idx }: { c: typeof APM_CORE_6[0]; idx: number }) {
 // MAIN PAGE
 // ─────────────────────────────────────────────
 
-type Tab = 'metrics' | 'visualizations' | 'stats' | 'triggers' | 'formulas'
+type Tab = 'metrics' | 'visualizations' | 'stats' | 'triggers' | 'formulas' | 'apm'
 
 const TABS: { id: Tab; label: string; icon: React.ElementType }[] = [
   { id: 'metrics', label: 'Metrics', icon: BarChart2 },
@@ -385,10 +387,24 @@ const TABS: { id: Tab; label: string; icon: React.ElementType }[] = [
   { id: 'stats', label: 'Stat Tools', icon: FlaskConical },
   { id: 'triggers', label: 'If → Then', icon: Zap },
   { id: 'formulas', label: 'Formulas', icon: Hash },
+  { id: 'apm', label: 'APM (0–2 Years)', icon: Star },
 ]
 
 export default function Cheatsheet() {
   const [activeTab, setActiveTab] = useState<Tab>('metrics')
+  const [isApmFullscreen, setIsApmFullscreen] = useState(false)
+
+  // Disable body scroll when modal is open
+  useEffect(() => {
+    if (isApmFullscreen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isApmFullscreen])
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -402,258 +418,176 @@ export default function Cheatsheet() {
         </div>
         <p className="text-sm text-neutral-400 max-w-2xl">
           30+ analytics concepts — metrics, visualizations, statistical tools, and interview triggers.
-          On the right: the <strong className="text-neutral-600">APM Core 6</strong>, covering ~85% of what APM interviews actually test.
+          Click the <strong className="text-neutral-600">APM (0–2 Years)</strong> tab to view the APM Core 6 Stack in full screen with PDF download.
         </p>
       </section>
 
-      {/* Two-column Layout */}
-      <div className="grid grid-cols-1 xl:grid-cols-[1fr_320px] gap-5 items-start">
+      {/* Main Cheatsheet (Single Column layout) */}
+      <div className="max-w-4xl space-y-5 cheatsheet-main-content">
 
-        {/* ── LEFT: Main Cheatsheet ── */}
-        <div className="space-y-5">
-
-          {/* Tab Bar */}
-          <div className="flex gap-1 flex-wrap">
-            {TABS.map(tab => {
-              const Icon = tab.icon
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-1.5 px-3 h-8 text-[11px] font-display font-semibold transition-all duration-fast focus:outline-none rounded-none ${
-                    activeTab === tab.id
-                      ? 'bg-brand-navy text-neutral-0 border border-brand-navy'
-                      : 'bg-neutral-0 text-neutral-600 border border-neutral-300 hover:border-brand-navy hover:text-brand-navy'
-                  }`}
-                >
-                  <Icon size={13} />
-                  {tab.label}
-                </button>
-              )
-            })}
-          </div>
-
-          {/* ── Metrics Tab ── */}
-          {activeTab === 'metrics' && (
-            <div className="space-y-2">
-              <SectionLabel>Core Metrics (click to expand)</SectionLabel>
-              <div className="space-y-2">
-                {METRICS.map(m => <MetricCard key={m.name} m={m} />)}
-              </div>
-
-              {/* Retention Benchmarks inlined */}
-              <div className="bg-neutral-0 border border-neutral-200 rounded-card p-4 mt-4 space-y-3">
-                <div className="flex items-center gap-2">
-                  <Activity size={16} className="text-brand-accent" />
-                  <h3 className="text-[13px] font-display font-bold text-neutral-900">Retention Benchmarks (D30)</h3>
-                </div>
-                <div className="grid grid-cols-3 gap-2">
-                  {RETENTION_BENCHMARKS.map(b => (
-                    <div key={b.type} className="bg-[#F9FAFB] border border-[#F3F4F6] rounded-lg p-3 text-center space-y-1">
-                      <FormulaChip>{b.d30}</FormulaChip>
-                      <div className="text-[10px] text-neutral-400">{b.type}</div>
-                    </div>
-                  ))}
-                </div>
-                <p className="text-[11px] text-neutral-400 italic">
-                  📈 PMF signal: Retention curve flattens = product-market fit achieved.
-                </p>
-              </div>
-            </div>
-          )}
-
-          {/* ── Visualizations Tab ── */}
-          {activeTab === 'visualizations' && (
-            <div className="space-y-2">
-              <SectionLabel>Chart Selection Guide</SectionLabel>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {VISUALIZATIONS.map(v => (
-                  <div
-                    key={v.name}
-                    className="bg-neutral-0 border border-neutral-200 rounded-card p-4 space-y-2 border-l-[3px] border-l-brand-accent"
-                  >
-                    <div className="flex items-center gap-2">
-                      <BookOpen size={14} className="text-brand-accent" />
-                      <span className="text-[13px] font-display font-bold text-neutral-900">{v.name}</span>
-                    </div>
-                    <p className="text-[12px] text-neutral-600 leading-relaxed">{v.when}</p>
-                    <div className="flex flex-wrap gap-1 pt-1">
-                      {v.trigger.map(t => (
-                        <span key={t} className="text-[9px] font-mono bg-[#EFF6FF] text-[#1D4ED8] border border-[#BFDBFE] px-2 py-0.5">
-                          "{t}"
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Chart quick-pick */}
-              <div className="bg-neutral-0 border border-neutral-200 rounded-card p-4 mt-2 space-y-3">
-                <div className="flex items-center gap-2">
-                  <Layers size={14} className="text-brand-punch" />
-                  <h3 className="text-[13px] font-display font-bold text-neutral-900">Chart Quick-Pick</h3>
-                </div>
-                <div className="space-y-1.5">
-                  {[
-                    ['Show change over time', 'Line Chart'],
-                    ['Compare categories', 'Bar Chart'],
-                    ['Find where users drop', 'Funnel Chart'],
-                    ['Track retention by group', 'Cohort Chart / Retention Curve'],
-                    ['Show 2D density / time patterns', 'Heatmap'],
-                    ['Find correlation / outliers', 'Scatter Plot'],
-                    ['Show user path / flow', 'Sankey Diagram'],
-                  ].map(([goal, chart]) => (
-                    <div key={goal} className="flex items-center gap-2 text-[12px]">
-                      <span className="text-neutral-500 flex-1">{goal}</span>
-                      <span className="font-mono text-[11px] text-brand-accent font-semibold">→ {chart}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* ── Statistical Tools Tab ── */}
-          {activeTab === 'stats' && (
-            <div className="space-y-2">
-              <SectionLabel>Statistical Tools</SectionLabel>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {STAT_TOOLS.map(t => (
-                  <div key={t.name} className="bg-neutral-0 border border-neutral-200 rounded-card p-4 space-y-2 hover:border-brand-accent transition-colors duration-fast">
-                    <div className="flex items-center gap-2">
-                      <FlaskConical size={13} className="text-brand-accent" />
-                      <span className="text-[13px] font-display font-bold text-neutral-900">{t.name}</span>
-                    </div>
-                    <p className="text-[12px] text-neutral-600 leading-relaxed">{t.def}</p>
-                  </div>
-                ))}
-              </div>
-
-              {/* PM Answer Structure */}
-              <div className="bg-neutral-0 border border-neutral-200 rounded-card p-4 mt-2 space-y-3">
-                <div className="flex items-center gap-2">
-                  <Target size={14} className="text-brand-positive" />
-                  <h3 className="text-[13px] font-display font-bold text-neutral-900">PM Answer Structure (any metric question)</h3>
-                </div>
-                <div className="space-y-2">
-                  {PM_ANSWER_STEPS.map(s => (
-                    <div key={s.step} className="flex gap-3 items-start">
-                      <div className="w-6 h-6 bg-brand-navy text-neutral-0 rounded-full flex items-center justify-center font-mono text-[10px] font-bold shrink-0">
-                        {s.step}
-                      </div>
-                      <div>
-                        <span className="text-[12px] font-display font-bold text-neutral-900">{s.label} </span>
-                        <span className="text-[12px] text-neutral-600">— {s.action}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* ── If → Then Triggers Tab ── */}
-          {activeTab === 'triggers' && (
-            <div className="space-y-2">
-              <SectionLabel>If interviewer says X → Use Y</SectionLabel>
-              <div className="space-y-2">
-                {TRIGGERS.map(t => (
-                  <div key={t.says} className="bg-neutral-0 border border-neutral-200 rounded-card p-4 flex flex-col sm:flex-row sm:items-center gap-3">
-                    <div className="flex items-center gap-2 sm:w-[40%] shrink-0">
-                      <Zap size={13} className="text-brand-punch shrink-0" />
-                      <span className="text-[12px] font-display font-semibold text-neutral-800 italic">"{t.says}"</span>
-                    </div>
-                    <div className="flex flex-wrap gap-1.5 pl-5 sm:pl-0">
-                      {t.use.map(u => (
-                        <span key={u} className="text-[10px] font-mono bg-[#EFF6FF] text-[#1D4ED8] border border-[#BFDBFE] px-2 py-0.5">
-                          {u}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* ── Formulas Tab ── */}
-          {activeTab === 'formulas' && (
-            <div className="space-y-2">
-              <SectionLabel>Key Formulas & Benchmarks</SectionLabel>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {FORMULAS.map(f => (
-                  <div key={f.label} className="bg-neutral-0 border border-neutral-200 rounded-card p-4 space-y-2">
-                    <span className="text-[10px] font-mono uppercase tracking-widest text-neutral-400 block">{f.label}</span>
-                    <FormulaChip>{f.formula}</FormulaChip>
-                    <p className="text-[12px] text-neutral-600 leading-relaxed">{f.benchmark}</p>
-                  </div>
-                ))}
-              </div>
-
-              {/* Golden Rules */}
-              <div className="bg-neutral-0 border border-neutral-200 rounded-card p-4 mt-2 space-y-3">
-                <div className="flex items-center gap-2">
-                  <Star size={14} className="text-brand-punch" />
-                  <h3 className="text-[13px] font-display font-bold text-neutral-900">Golden Rules</h3>
-                </div>
-                <ul className="space-y-2">
-                  {GOLDEN_RULES.map((rule, i) => (
-                    <li key={i} className="flex gap-2.5 items-start text-[12px] text-neutral-600 leading-relaxed">
-                      <span className="text-brand-punch font-mono font-bold text-[11px] mt-0.5 shrink-0">{i + 1}.</span>
-                      {rule}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          )}
+        {/* Tab Bar */}
+        <div className="flex gap-1 flex-wrap">
+          {TABS.map(tab => {
+            const Icon = tab.icon
+            const isApm = tab.id === 'apm'
+            return (
+              <button
+                key={tab.id}
+                onClick={() => {
+                  if (isApm) {
+                    setIsApmFullscreen(true)
+                  } else {
+                    setActiveTab(tab.id)
+                  }
+                }}
+                className={`flex items-center gap-1.5 px-3 h-8 text-[11px] font-display font-semibold transition-all duration-fast focus:outline-none rounded-none cursor-pointer ${
+                  !isApm && activeTab === tab.id
+                    ? 'bg-brand-navy text-neutral-0 border border-brand-navy'
+                    : 'bg-neutral-0 text-neutral-600 border border-neutral-300 hover:border-brand-navy hover:text-brand-navy'
+                }`}
+              >
+                <Icon size={13} />
+                {tab.label}
+              </button>
+            )
+          })}
         </div>
 
-        {/* ── RIGHT: APM Core 6 Sidebar ── */}
-        <aside className="space-y-4">
-          {/* Header Card */}
-          <div className="bg-brand-navy rounded-card p-5 space-y-1 relative overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-brand-accent via-brand-punch to-transparent" />
-            <div className="text-[9px] font-mono uppercase tracking-[0.10em] text-white/35 flex items-center gap-1.5">
-              <span className="w-1 h-1 rounded-full bg-brand-positive inline-block" />
-              APM / PM (0–2 years)
+        {/* ── Metrics Tab ── */}
+        {activeTab === 'metrics' && (
+          <div className="space-y-2">
+            <SectionLabel>Core Metrics (click to expand)</SectionLabel>
+            <div className="space-y-2">
+              {METRICS.map(m => <MetricCard key={m.name} m={m} />)}
             </div>
-            <h2 className="text-[16px] font-display font-extrabold text-white leading-tight">
-              APM Core 6 Stack
-            </h2>
-            <p className="text-[11px] text-white/50 leading-relaxed">
-              Covers ~85% of what APM interviews actually test. Master these before anything else.
-            </p>
-            <div className="flex flex-wrap gap-1.5 pt-1">
-              <Badge color="green">FAANG</Badge>
-              <Badge color="amber">Startup</Badge>
-              <Badge color="blue">SaaS</Badge>
-              <Badge color="purple">Growth Stage</Badge>
+
+            {/* Retention Benchmarks inlined */}
+            <div className="bg-neutral-0 border border-neutral-200 rounded-card p-4 mt-4 space-y-3">
+              <div className="flex items-center gap-2">
+                <Activity size={16} className="text-brand-accent" />
+                <h3 className="text-[13px] font-display font-bold text-neutral-900">Retention Benchmarks (D30)</h3>
+              </div>
+              <div className="grid grid-cols-3 gap-2">
+                {RETENTION_BENCHMARKS.map(b => (
+                  <div key={b.type} className="bg-[#F9FAFB] border border-[#F3F4F6] rounded-lg p-3 text-center space-y-1">
+                    <FormulaChip>{b.d30}</FormulaChip>
+                    <div className="text-[10px] text-neutral-400">{b.type}</div>
+                  </div>
+                ))}
+              </div>
+              <p className="text-[11px] text-neutral-400 italic">
+                📈 PMF signal: Retention curve flattens = product-market fit achieved.
+              </p>
             </div>
           </div>
+        )}
 
-          {/* Core 6 Cards */}
-          <div className="bg-brand-navy rounded-card p-4 space-y-2">
-            <SectionLabel>Core Concepts (click to expand)</SectionLabel>
-            <div className="space-y-1.5">
-              {APM_CORE_6.map((c, idx) => (
-                <ApmConceptCard key={c.rank} c={c} idx={idx} />
+        {/* ── Visualizations Tab ── */}
+        {activeTab === 'visualizations' && (
+          <div className="space-y-2">
+            <SectionLabel>Chart Selection Guide</SectionLabel>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {VISUALIZATIONS.map(v => (
+                <div
+                  key={v.name}
+                  className="bg-neutral-0 border border-neutral-200 rounded-card p-4 space-y-2 border-l-[3px] border-l-brand-accent"
+                >
+                  <div className="flex items-center gap-2">
+                    <BookOpen size={14} className="text-brand-accent" />
+                    <span className="text-[13px] font-display font-bold text-neutral-900">{v.name}</span>
+                  </div>
+                  <p className="text-[12px] text-neutral-600 leading-relaxed">{v.when}</p>
+                  <div className="flex flex-wrap gap-1 pt-1">
+                    {v.trigger.map(t => (
+                      <span key={t} className="text-[9px] font-mono bg-[#EFF6FF] text-[#1D4ED8] border border-[#BFDBFE] px-2 py-0.5">
+                        "{t}"
+                      </span>
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
-          </div>
 
-          {/* Practice Questions */}
-          <div className="bg-brand-navy rounded-card p-4 space-y-3">
-            <div className="text-[9px] font-mono uppercase tracking-[0.10em] text-white/35">Rapid Practice Triggers</div>
+            {/* Chart quick-pick */}
+            <div className="bg-neutral-0 border border-neutral-200 rounded-card p-4 mt-2 space-y-3">
+              <div className="flex items-center gap-2">
+                <Layers size={14} className="text-brand-punch" />
+                <h3 className="text-[13px] font-display font-bold text-neutral-900">Chart Quick-Pick</h3>
+              </div>
+              <div className="space-y-1.5">
+                {[
+                  ['Show change over time', 'Line Chart'],
+                  ['Compare categories', 'Bar Chart'],
+                  ['Find where users drop', 'Funnel Chart'],
+                  ['Track retention by group', 'Cohort Chart / Retention Curve'],
+                  ['Show 2D density / time patterns', 'Heatmap'],
+                  ['Find correlation / outliers', 'Scatter Plot'],
+                  ['Show user path / flow', 'Sankey Diagram'],
+                ].map(([goal, chart]) => (
+                  <div key={goal} className="flex items-center gap-2 text-[12px]">
+                    <span className="text-neutral-500 flex-1">{goal}</span>
+                    <span className="font-mono text-[11px] text-brand-accent font-semibold">→ {chart}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ── Statistical Tools Tab ── */}
+        {activeTab === 'stats' && (
+          <div className="space-y-2">
+            <SectionLabel>Statistical Tools</SectionLabel>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {STAT_TOOLS.map(t => (
+                <div key={t.name} className="bg-neutral-0 border border-neutral-200 rounded-card p-4 space-y-2 hover:border-brand-accent transition-colors duration-fast">
+                  <div className="flex items-center gap-2">
+                    <FlaskConical size={13} className="text-brand-accent" />
+                    <span className="text-[13px] font-display font-bold text-neutral-900">{t.name}</span>
+                  </div>
+                  <p className="text-[12px] text-neutral-600 leading-relaxed">{t.def}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* PM Answer Structure */}
+            <div className="bg-neutral-0 border border-neutral-200 rounded-card p-4 mt-2 space-y-3">
+              <div className="flex items-center gap-2">
+                <Target size={14} className="text-brand-positive" />
+                <h3 className="text-[13px] font-display font-bold text-neutral-900">PM Answer Structure (any metric question)</h3>
+              </div>
+              <div className="space-y-2">
+                {PM_ANSWER_STEPS.map(s => (
+                  <div key={s.step} className="flex gap-3 items-start">
+                    <div className="w-6 h-6 bg-brand-navy text-neutral-0 rounded-full flex items-center justify-center font-mono text-[10px] font-bold shrink-0">
+                      {s.step}
+                    </div>
+                    <div>
+                      <span className="text-[12px] font-display font-bold text-neutral-900">{s.label} </span>
+                      <span className="text-[12px] text-neutral-600">— {s.action}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ── If → Then Triggers Tab ── */}
+        {activeTab === 'triggers' && (
+          <div className="space-y-2">
+            <SectionLabel>If interviewer says X → Use Y</SectionLabel>
             <div className="space-y-2">
-              {APM_PRACTICE.map((p, i) => (
-                <div key={i} className="border border-white/10 rounded-[6px] p-2.5 space-y-1.5">
-                  <p className="text-[11px] text-white/70 leading-relaxed">{p.q}</p>
-                  <div className="flex gap-1 flex-wrap">
-                    {p.concepts.map(n => (
-                      <span key={n} className="text-[9px] font-mono text-brand-punch bg-brand-punch/10 border border-brand-punch/20 px-1.5 py-0.5 rounded-none">
-                        #{n}
+              {TRIGGERS.map(t => (
+                <div key={t.says} className="bg-neutral-0 border border-neutral-200 rounded-card p-4 flex flex-col sm:flex-row sm:items-center gap-3">
+                  <div className="flex items-center gap-2 sm:w-[40%] shrink-0">
+                    <Zap size={13} className="text-brand-punch shrink-0" />
+                    <span className="text-[12px] font-display font-semibold text-neutral-800 italic">"{t.says}"</span>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5 pl-5 sm:pl-0">
+                    {t.use.map(u => (
+                      <span key={u} className="text-[10px] font-mono bg-[#EFF6FF] text-[#1D4ED8] border border-[#BFDBFE] px-2 py-0.5">
+                        {u}
                       </span>
                     ))}
                   </div>
@@ -661,27 +595,251 @@ export default function Cheatsheet() {
               ))}
             </div>
           </div>
+        )}
 
-          {/* Deprioritize Box */}
-          <div className="bg-brand-navy rounded-card p-4 space-y-3">
-            <div className="flex items-center gap-2">
-              <AlertCircle size={13} className="text-brand-danger/80" />
-              <span className="text-[11px] font-display font-bold text-white/70">What to Deprioritize at APM Level</span>
-            </div>
-            <div className="space-y-2">
-              {APM_DEPRIORITIZE.map(d => (
-                <div key={d.concept} className="border-l-2 border-brand-danger/30 pl-2.5">
-                  <div className="text-[11px] font-semibold text-white/60">{d.concept}</div>
-                  <div className="text-[10px] text-white/40 leading-relaxed">{d.why}</div>
+        {/* ── Formulas Tab ── */}
+        {activeTab === 'formulas' && (
+          <div className="space-y-2">
+            <SectionLabel>Key Formulas & Benchmarks</SectionLabel>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {FORMULAS.map(f => (
+                <div key={f.label} className="bg-neutral-0 border border-neutral-200 rounded-card p-4 space-y-2">
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-neutral-400 block">{f.label}</span>
+                  <FormulaChip>{f.formula}</FormulaChip>
+                  <p className="text-[12px] text-neutral-600 leading-relaxed">{f.benchmark}</p>
                 </div>
               ))}
             </div>
-            <p className="text-[10px] italic text-white/30 border-t border-white/10 pt-2">
-              Learn these as depth when interviewers push back — not as primary answers.
+
+            {/* Golden Rules */}
+            <div className="bg-neutral-0 border border-neutral-200 rounded-card p-4 mt-2 space-y-3">
+              <div className="flex items-center gap-2">
+                <Star size={14} className="text-brand-punch" />
+                <h3 className="text-[13px] font-display font-bold text-neutral-900">Golden Rules</h3>
+              </div>
+              <ul className="space-y-2">
+                {GOLDEN_RULES.map((rule, i) => (
+                  <li key={i} className="flex gap-2.5 items-start text-[12px] text-neutral-600 leading-relaxed">
+                    <span className="text-brand-punch font-mono font-bold text-[11px] mt-0.5 shrink-0">{i + 1}.</span>
+                    {rule}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* APM FULL SCREEN OVERLAY */}
+      {isApmFullscreen && (
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-[#0B1E36] text-white p-6 sm:p-8 md:p-12 apm-fullscreen-modal animate-fade-in">
+          {/* Print specific style overrides */}
+          <style>{`
+            @media print {
+              header,
+              aside,
+              .no-print,
+              .cheatsheet-main-content {
+                display: none !important;
+              }
+              body,
+              #root,
+              main {
+                background: white !important;
+                color: black !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                height: auto !important;
+                min-height: 0 !important;
+                overflow: visible !important;
+                position: static !important;
+              }
+              .apm-fullscreen-modal {
+                position: static !important;
+                width: 100% !important;
+                height: auto !important;
+                background: white !important;
+                color: black !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                overflow: visible !important;
+              }
+              .apm-print-card {
+                background: white !important;
+                color: #111111 !important;
+                border: 1px solid #d1d5db !important;
+                page-break-inside: avoid !important;
+                margin-bottom: 1.5rem !important;
+                padding: 1.25rem !important;
+                box-shadow: none !important;
+              }
+              .apm-print-text {
+                color: #111111 !important;
+              }
+              .apm-print-muted {
+                color: #4b5563 !important;
+              }
+              .apm-print-badge {
+                background: #f3f4f6 !important;
+                color: #111111 !important;
+                border: 1px solid #9ca3af !important;
+              }
+            }
+          `}</style>
+
+          {/* Fullscreen Overlay Controls */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-6 mb-8 no-print">
+            <button
+              onClick={() => setIsApmFullscreen(false)}
+              className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all text-xs font-display font-semibold cursor-pointer rounded-md text-white"
+            >
+              <ArrowLeft size={14} />
+              Back to Cheatsheet
+            </button>
+            
+            <button
+              onClick={() => window.print()}
+              className="flex items-center gap-2 px-4 py-2 bg-brand-accent hover:bg-blue-600 transition-all text-xs font-display font-semibold cursor-pointer rounded-md text-white shadow-lg shadow-blue-500/20"
+            >
+              <Printer size={14} />
+              Download PDF
+            </button>
+          </div>
+
+          {/* Print-only Header (visible only when printing) */}
+          <div className="hidden print:block border-b border-neutral-300 pb-4 mb-6">
+            <h1 className="text-2xl font-extrabold text-neutral-900">APM Core 6 Stack Cheatsheet (0–2 Years)</h1>
+            <p className="text-xs text-neutral-500 mt-1">
+              Covers ~85% of what APM interviews actually test. Master these before anything else.
             </p>
           </div>
-        </aside>
-      </div>
+
+          {/* Immersive Dark Screen Header */}
+          <div className="space-y-2 mb-8 print:hidden">
+            <div className="text-xs font-mono uppercase tracking-[0.15em] text-brand-punch flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-brand-positive animate-pulse-dot" />
+              APM / PM (0–2 YEARS) INTERVIEW PREP
+            </div>
+            <h1 className="text-3xl sm:text-4xl font-display font-extrabold tracking-tight text-white">
+              APM Core 6 Stack
+            </h1>
+            <p className="text-sm text-white/60 max-w-2xl">
+              Covers ~85% of what APM interviews actually test. Master these before anything else.
+            </p>
+            <div className="flex flex-wrap gap-2 pt-2">
+              <Badge color="green">FAANG</Badge>
+              <Badge color="amber">Startup</Badge>
+              <Badge color="blue">SaaS</Badge>
+              <Badge color="purple">Growth Stage</Badge>
+            </div>
+          </div>
+
+          {/* Full concepts expanded grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {APM_CORE_6.map((c) => {
+              const coverageColor = c.coverage >= 90 ? 'text-brand-positive' : c.coverage >= 80 ? 'text-brand-punch' : 'text-brand-accent'
+              const priorityBadge: 'green' | 'amber' | 'blue' | 'purple' = c.priority === 'very high' ? 'green' : c.priority === 'high' ? 'amber' : 'purple'
+
+              return (
+                <div key={c.rank} className="border border-white/10 bg-white/5 rounded-lg p-5 space-y-4 apm-print-card page-break-avoid">
+                  {/* Card Header */}
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <span className="font-mono text-xl font-bold text-brand-punch">{c.rank}</span>
+                      <h3 className="text-base font-bold text-white apm-print-text">{c.concept}</h3>
+                    </div>
+                    <div className="flex flex-col items-end gap-1 shrink-0">
+                      <Badge color={priorityBadge}>{c.priority}</Badge>
+                      <span className={`text-[10px] font-mono ${coverageColor} apm-print-text`}>{c.coverage}% of interviews</span>
+                    </div>
+                  </div>
+
+                  {/* Why it's tested */}
+                  <div className="space-y-1">
+                    <span className="text-[9px] font-mono uppercase tracking-widest text-white/40 apm-print-muted block">Why it's tested</span>
+                    <p className="text-xs text-white/70 apm-print-text leading-relaxed">{c.why}</p>
+                  </div>
+
+                  {/* Answer Structure */}
+                  <div className="space-y-1.5">
+                    <span className="text-[9px] font-mono uppercase tracking-widest text-brand-punch/70 apm-print-muted block">Answer Structure</span>
+                    <ol className="space-y-1">
+                      {c.steps.map((s, i) => (
+                        <li key={i} className="text-xs text-white/80 apm-print-text flex gap-2 items-start leading-relaxed">
+                          <span className="font-mono text-[10px] text-brand-punch/60 mt-0.5 shrink-0">{i + 1}.</span>
+                          <span>{s}</span>
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+
+                  {/* Example */}
+                  <div className="bg-white/5 border border-white/5 rounded-md p-3.5 apm-print-card">
+                    <span className="text-[9px] font-mono uppercase tracking-widest text-brand-positive/70 apm-print-muted block mb-1">Example</span>
+                    <p className="text-xs text-white/70 italic leading-relaxed apm-print-text">"{c.example}"</p>
+                  </div>
+
+                  {/* Common Mistakes */}
+                  <div className="flex gap-2 items-start text-white/60 apm-print-muted">
+                    <AlertCircle size={13} className="text-brand-danger shrink-0 mt-0.5" />
+                    <p className="text-xs leading-relaxed">{c.mistake}</p>
+                  </div>
+
+                  {/* Triggers */}
+                  <div className="flex flex-wrap gap-1 pt-1">
+                    {c.triggers.map(t => (
+                      <span key={t} className="text-[9px] font-mono text-white/40 bg-white/5 px-2 py-0.5 border border-white/10 apm-print-badge">
+                        "{t}"
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+
+          {/* Footer Sections */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 pt-8 border-t border-white/10 page-break-avoid">
+            {/* Practice Questions */}
+            <div className="space-y-4 apm-print-card">
+              <h3 className="text-sm font-mono uppercase tracking-[0.10em] text-white/50 apm-print-muted">Rapid Practice Triggers</h3>
+              <div className="space-y-3">
+                {APM_PRACTICE.map((p, i) => (
+                  <div key={i} className="border border-white/10 bg-white/5 rounded-md p-3.5 apm-print-card">
+                    <p className="text-xs text-white/80 leading-relaxed apm-print-text">{p.q}</p>
+                    <div className="flex gap-1 flex-wrap mt-2">
+                      {p.concepts.map(n => (
+                        <span key={n} className="text-[9px] font-mono text-brand-punch bg-brand-punch/10 border border-brand-punch/20 px-1.5 py-0.5 apm-print-badge">
+                          #{n}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Deprioritize Box */}
+            <div className="space-y-4 apm-print-card">
+              <div className="flex items-center gap-2">
+                <AlertCircle size={14} className="text-brand-danger shrink-0" />
+                <h3 className="text-sm font-mono uppercase tracking-[0.10em] text-white/50 apm-print-muted">What to Deprioritize at APM Level</h3>
+              </div>
+              <div className="space-y-3">
+                {APM_DEPRIORITIZE.map(d => (
+                  <div key={d.concept} className="border-l-2 border-brand-danger/35 pl-3.5 space-y-1">
+                    <div className="text-xs font-semibold text-white apm-print-text">{d.concept}</div>
+                    <div className="text-xs text-white/50 leading-relaxed apm-print-muted">{d.why}</div>
+                  </div>
+                ))}
+              </div>
+              <p className="text-xs italic text-white/30 border-t border-white/10 pt-3 apm-print-muted">
+                Learn these as depth when interviewers push back — not as primary answers.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
