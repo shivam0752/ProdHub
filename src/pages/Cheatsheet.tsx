@@ -816,3 +816,5 @@ export default function Cheatsheet() {
         </div>
       )}
     </div>
+  )
+}
