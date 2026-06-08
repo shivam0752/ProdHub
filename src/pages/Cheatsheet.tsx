@@ -567,39 +567,23 @@ export default function Cheatsheet() {
               <span className="w-1.5 h-1.5 rounded-full bg-brand-positive animate-pulse-dot" />
               APM / PM (0–2 YEARS)
             </div>
-            <h2 className="text-[16px] font-display font-extrabold text-white leading-tight group-hover:text-brand-punch transition-colors duration-fast">
-              APM Core 6 Stack
-            </h2>
-            <p className="text-[11px] text-white/60 leading-relaxed">
-              Covers ~85% of what APM interviews actually test. Click to expand full details, practice questions, and download as PDF.
-            </p>
-            <div className="flex flex-wrap gap-1.5 pt-1.5">
-              <Badge color="green">FAANG</Badge>
-              <Badge color="amber">Startup</Badge>
-              <Badge color="blue">SaaS</Badge>
-            </div>
-            <div className="text-[11px] font-mono text-brand-punch font-semibold pt-2 flex items-center gap-1 group-hover:translate-x-1 transition-transform duration-fast">
-              Expand Full Details →
-            </div>
-          </div>
-        </aside>
-      </div>
-
-      {/* APM MODAL OVERLAY (Centered in the middle, covering cheatsheet info) */}
+                {/* APM MODAL OVERLAY (Centered in the middle, covering cheatsheet info) */}
       {isApmFullscreen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-10 bg-neutral-900/60 backdrop-blur-sm no-print">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-10 bg-neutral-900/60 backdrop-blur-sm apm-modal-backdrop">
           <div className="w-full max-w-5xl max-h-[85vh] bg-[#0B1E36] text-white rounded-card border border-white/10 flex flex-col shadow-2xl animate-fade-in relative apm-fullscreen-modal overflow-hidden">
             
             {/* Print specific style overrides */}
             <style>{`
               @media print {
+                /* Hide AppShell elements, left cheatsheet column, and elements explicitly marked no-print */
                 header,
                 aside,
-                .no-print,
                 .cheatsheet-main-content,
-                .fixed.inset-0 {
+                .no-print {
                   display: none !important;
                 }
+                
+                /* Reset root page body, root container, and main workspace boundaries */
                 body,
                 #root,
                 main {
@@ -612,6 +596,20 @@ export default function Cheatsheet() {
                   overflow: visible !important;
                   position: static !important;
                 }
+                
+                /* Reformat fixed backdrop modal container as standard block */
+                .apm-modal-backdrop {
+                  position: static !important;
+                  display: block !important;
+                  background: transparent !important;
+                  padding: 0 !important;
+                  margin: 0 !important;
+                  width: 100% !important;
+                  height: auto !important;
+                  overflow: visible !important;
+                }
+                
+                /* Reformat dark fullscreen modal card for printing */
                 .apm-fullscreen-modal {
                   position: static !important;
                   display: block !important;
@@ -627,6 +625,8 @@ export default function Cheatsheet() {
                   padding: 0 !important;
                   margin: 0 !important;
                 }
+                
+                /* Card formatting overrides */
                 .apm-print-card {
                   background: white !important;
                   color: #111111 !important;
@@ -636,22 +636,24 @@ export default function Cheatsheet() {
                   padding: 1.25rem !important;
                   box-shadow: none !important;
                 }
+                
                 .apm-print-text {
                   color: #111111 !important;
                 }
+                
                 .apm-print-muted {
                   color: #4b5563 !important;
                 }
+                
                 .apm-print-badge {
                   background: #f3f4f6 !important;
                   color: #111111 !important;
                   border: 1px solid #9ca3af !important;
                 }
-              }
             `}</style>
 
             {/* Modal Header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 shrink-0">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 shrink-0 no-print">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-brand-positive" />
                 <h2 className="text-[16px] font-display font-extrabold text-white">APM Core 6 Stack Reference</h2>
