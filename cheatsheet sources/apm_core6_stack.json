@@ -1,0 +1,177 @@
+{
+  "title": "APM/PM Core 6 Analytics Stack",
+  "description": "The 6 essential analytics concepts for APM/PM interviews (0-2 years experience), covering ~85% of what interviews actually test",
+  "target_level": "APM / PM (0-2 years)",
+  "target_companies": "All — FAANG, startup, SaaS, growth stage",
+  "core_6": [
+    {
+      "rank": 1,
+      "concept": "Funnel Analysis + Drop-off Diagnosis",
+      "priority": "very high",
+      "interview_coverage_pct": 90,
+      "why_essential": "The single most common APM question: 'something is dropping off, walk me through how you'd investigate.' You need a structured answer every time — not just knowing what a funnel is.",
+      "trigger_words": ["drop-off", "conversion", "where users leave", "abandonment", "metric drop"],
+      "tools_used": ["Funnel Chart", "Segmentation", "Conversion Rate", "Session Replay"],
+      "answer_structure": [
+        "Quantify the drop at each step as a percentage",
+        "Identify the single biggest drop by volume × value",
+        "Segment that step by platform, device, acquisition channel, user tenure",
+        "Hypothesize 3 causes ranked by probability",
+        "Propose validation method (session replay, survey, A/B test)",
+        "Recommend fix with expected impact"
+      ],
+      "example_answer": "Funnel: Homepage (100%) → Signup (42%) → Step 1 (38%) → Step 2 (21%) → Activation (14%). Biggest drop is Step 1→2 at 45%. I'd segment by platform — if iOS drops harder, it's likely a UI bug. Run session replays on step 2. Fix the top friction point and A/B test.",
+      "common_mistake": "Naming the funnel steps without prioritizing which drop to fix first, or not segmenting the biggest drop"
+    },
+    {
+      "rank": 2,
+      "concept": "Retention Analysis + Cohort Thinking",
+      "priority": "very high",
+      "interview_coverage_pct": 88,
+      "why_essential": "'Retention dropped' is asked in every PM loop. You need to know what a retention curve shape means, what cohort comparison reveals, and how to separate signal from mix shift. D1/D7/D30 benchmarks must be instant recall.",
+      "trigger_words": ["retention dropped", "users not returning", "long-term value", "habit forming", "cohort"],
+      "tools_used": ["Cohort Chart", "Retention Curve", "Cohort Analysis", "Line Chart"],
+      "benchmarks": {
+        "consumer_social": "D30: 20-25%",
+        "saas": "D30: 50-70%",
+        "gaming": "D30: 10-15%",
+        "pmf_signal": "Retention curve flattens = product-market fit achieved"
+      },
+      "answer_structure": [
+        "State current D1/D7/D30 numbers and benchmark against industry",
+        "Pull cohort chart — compare recent cohorts vs older ones",
+        "If newer cohorts worse: either product regressed or acquisition channel changed",
+        "Segment by acquisition source to disentangle product quality vs user intent",
+        "Identify the D7→D30 drop — that is the habit-formation gap to fix",
+        "Recommend intervention: onboarding improvement, re-engagement trigger, feature fix"
+      ],
+      "example_answer": "D30 retention dropped from 28% to 18%. Cohort chart shows Jan cohort at 28%, March at 18% — the drop coincides with our pricing change in Feb. New users are lower-intent. Segment by acquisition channel: paid users churn 2x faster than organic. Fix: improve activation for paid users or adjust targeting.",
+      "common_mistake": "Looking at aggregate retention without cohort breakdown — misses whether it's a product regression or a mix-shift problem"
+    },
+    {
+      "rank": 3,
+      "concept": "A/B Testing Framework (end-to-end)",
+      "priority": "very high",
+      "interview_coverage_pct": 85,
+      "why_essential": "Every company that ships features tests them. You must state the full framework: hypothesis → primary metric + guardrail → sample size logic → runtime → ship decision. Saying 'run an A/B test' without the rest fails this question.",
+      "trigger_words": ["experiment", "test a feature", "validate", "prove", "rollout", "ship decision"],
+      "tools_used": ["Sample Size Calculation", "Confidence Interval", "P-value", "Power Analysis"],
+      "full_framework": {
+        "step_1_hypothesis": "If we [change X], then [metric Y] will improve by [Z%] because [reason]",
+        "step_2_metrics": "Primary metric (what you're optimizing) + 2 guardrail metrics (what you won't sacrifice)",
+        "step_3_sample_size": "Use baseline rate, MDE, α=0.05, power=80% to calculate minimum n per arm",
+        "step_4_runtime": "Min 2 weeks to cover weekly seasonality. Don't peek before reaching sample size.",
+        "step_5_ship_decision": "Ship if p<0.05 AND confidence interval fully above zero AND guardrails not broken"
+      },
+      "example_answer": "Hypothesis: simplifying checkout step 2 will lift conversion by 3%. Primary metric: checkout completion rate. Guardrails: D7 retention, average order value. Sample size: baseline 5% CVR, 1pp MDE, need ~3,800 users/arm. With 500/day per arm = 8 days. Run 2 weeks. Ship if CI is [+1%, +5%] — fully positive.",
+      "common_mistake": "Saying 'run an A/B test' without specifying guardrail metrics, sample size rationale, or ship decision criteria"
+    },
+    {
+      "rank": 4,
+      "concept": "Root Cause Analysis (metric anomaly)",
+      "priority": "high",
+      "interview_coverage_pct": 80,
+      "why_essential": "'DAU dropped 15% overnight — what do you do?' is one of the most common APM questions. You need a repeatable investigation structure. Speed and structure win here.",
+      "trigger_words": ["anomaly", "sudden drop", "spike", "something broke", "metric moved", "investigate"],
+      "tools_used": ["Standard Deviation", "Segmentation", "Annotated Line Chart", "Cohort Comparison"],
+      "investigation_structure": [
+        "Step 1 — Rule out data issues: check pipeline, logging, instrumentation. Is the drop real?",
+        "Step 2 — Check magnitude: how many SDs from mean? 2σ = investigate, 3σ = almost certainly real",
+        "Step 3 — Segment to isolate: platform, geography, user segment, feature area",
+        "Step 4 — Correlate with events: deployments, outages, competitor launches, external news",
+        "Step 5 — Hypothesize causes ranked by probability",
+        "Step 6 — Validate fastest hypothesis first, then act"
+      ],
+      "example_answer": "DAU dropped 12% Thursday. Step 1: check data pipeline — no issues. Step 2: 3.6 SDs below mean — real signal. Step 3: segment by platform — iOS down 25%, Android flat. Step 4: iOS build deployed Wednesday. Conclusion: iOS bug. Hot-fix immediately, then do post-mortem.",
+      "common_mistake": "Jumping to product hypotheses without first ruling out data pipeline issues and segmenting to isolate the variable"
+    },
+    {
+      "rank": 5,
+      "concept": "North Star Metric + Guardrail Metrics",
+      "priority": "high",
+      "interview_coverage_pct": 78,
+      "why_essential": "Every 'how would you measure success of X?' question requires this. Pick one north star that captures core value delivery, define 2 guardrails. Without guardrails you sound junior.",
+      "trigger_words": ["measure success", "product health", "metrics for X", "define success", "how would you track"],
+      "tools_used": ["DAU/MAU", "Engagement Rate", "Activation Rate", "LTV"],
+      "north_star_examples": [
+        { "product_type": "Social / content", "north_star": "DAU or time spent per DAU", "guardrails": ["D7 retention", "content creation rate"] },
+        { "product_type": "Marketplace", "north_star": "Successful transactions per week", "guardrails": ["Seller satisfaction", "Refund rate"] },
+        { "product_type": "SaaS / B2B", "north_star": "Weekly active teams or seats used", "guardrails": ["NPS", "Support ticket volume"] },
+        { "product_type": "Consumer subscription", "north_star": "Monthly paying subscribers", "guardrails": ["Churn rate", "DAU/MAU ratio"] }
+      ],
+      "answer_structure": [
+        "Identify what core value the product delivers to users",
+        "Define north star as the metric that best captures that value delivery at scale",
+        "Define 2 guardrails — one for user experience, one for business health",
+        "Explain why the north star is leading (predicts future health) not lagging"
+      ],
+      "example_answer": "For a food delivery app, north star = successful orders completed per week. This captures value for both user (food delivered) and business (revenue). Guardrails: delivery time (user experience) and restaurant partner retention (supply health). I'd avoid GMV as north star — it's lagging and inflatable via discounts.",
+      "common_mistake": "Picking a vanity metric (signups, downloads, page views) as north star, or defining no guardrails"
+    },
+    {
+      "rank": 6,
+      "concept": "Segmentation as a reflex",
+      "priority": "universal",
+      "interview_coverage_pct": 95,
+      "why_essential": "Not a standalone tool — a habit applied to every answer. Interviewers explicitly look for this. Candidates who give aggregate answers without segmenting read as analytically shallow.",
+      "trigger_words": ["any metric question", "which users", "why is X different", "break it down"],
+      "tools_used": ["Bar Chart", "Cohort Breakdown", "Heatmap", "Scatter Plot"],
+      "default_segmentation_dimensions": [
+        "Platform (iOS vs Android vs Web)",
+        "Geography (market, country, city tier)",
+        "User tenure (new <7 days, growing 7-30 days, retained 30+ days)",
+        "Acquisition channel (paid, organic, referral, direct)",
+        "User type (free vs paid, casual vs power user)",
+        "Device type (mobile vs desktop, screen size)"
+      ],
+      "how_to_apply": "In every metric answer, after stating the aggregate number, immediately say: 'I'd break this down by platform, user tenure, and acquisition channel to see if the trend is uniform or isolated to a segment.'",
+      "example_answer": "Overall DAU is flat — but I'd never stop there. Breaking by platform: web DAU down 20%, mobile DAU up 35%. The product is shifting mobile-first and we've been optimizing the wrong surface. Breaking by tenure: new users down 40%, retained users flat — it's an acquisition or onboarding problem, not a retention problem.",
+      "common_mistake": "Giving aggregate metric answers without segmentation — the #1 signal that a candidate thinks at surface level"
+    }
+  ],
+  "stack_covers_interview_types": {
+    "metric_deep_dive": {
+      "description": "Something dropped — walk me through how you'd investigate",
+      "primary_concepts": [1, 4, 6],
+      "concept_names": ["Funnel Analysis + Drop-off Diagnosis", "Root Cause Analysis", "Segmentation as a reflex"],
+      "answer_flow": "Segment first → isolate the drop → funnel to find the step → RCA to find the cause → recommend fix"
+    },
+    "experiment_design": {
+      "description": "How would you test / validate this feature?",
+      "primary_concepts": [3, 6],
+      "concept_names": ["A/B Testing Framework", "Segmentation as a reflex"],
+      "answer_flow": "Hypothesis → metrics + guardrails → sample size → runtime → ship decision → segment results"
+    },
+    "product_health_diagnosis": {
+      "description": "How would you assess if this product is healthy?",
+      "primary_concepts": [2, 5, 6],
+      "concept_names": ["Retention Analysis + Cohort Thinking", "North Star Metric + Guardrails", "Segmentation as a reflex"],
+      "answer_flow": "State north star → check retention curve shape → cohort breakdown → segment by user type → diagnosis"
+    },
+    "estimation_sizing": {
+      "description": "Estimate X, size market Y, how many users do Z?",
+      "primary_concepts": [5, 6],
+      "concept_names": ["North Star Metric + Guardrails", "Segmentation as a reflex"],
+      "answer_flow": "Anchor on north star metric → segment population into buckets → estimate each bucket → sanity check total",
+      "note": "Estimation is structured thinking with segmentation, not arithmetic. The north star anchors what you're estimating."
+    }
+  },
+  "what_to_deprioritize_at_apm_level": {
+    "note": "These are real concepts but secondary for 0-2 year PM interviews. Learn them as depth when interviewers push back — not as primary answers.",
+    "deprioritized": [
+      { "concept": "LTV / CAC", "why": "More relevant for growth PM or senior PM roles, not core APM analytics" },
+      { "concept": "P-value mechanics", "why": "Know that p<0.05 = significant and CI matters more — don't recite the formula" },
+      { "concept": "Variance / Standard Deviation formula", "why": "Know the concept (2σ = anomaly) but don't derive it in interviews" },
+      { "concept": "Heatmaps", "why": "Useful but rarely the primary chart in an APM interview — mention as supporting detail" },
+      { "concept": "Power Analysis formula", "why": "Know the concept (need enough traffic to detect MDE) — calculators handle the math" }
+    ]
+  },
+  "rapid_practice_triggers": [
+    { "question": "DAU dropped 15% overnight. What do you do?", "use_concepts": [4, 6] },
+    { "question": "Our checkout conversion fell from 5% to 3%. Walk me through your analysis.", "use_concepts": [1, 6] },
+    { "question": "How would you measure success of a new notification feature?", "use_concepts": [5, 6] },
+    { "question": "We want to test a new onboarding flow. How would you design the experiment?", "use_concepts": [3, 6] },
+    { "question": "Retention dropped last month. How do you investigate?", "use_concepts": [2, 4, 6] },
+    { "question": "Estimate how many people use Google Maps daily in India.", "use_concepts": [5, 6] }
+  ]
+}

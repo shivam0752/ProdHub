@@ -10,7 +10,8 @@ import {
   LogOut, 
   Menu, 
   X,
-  MessageSquare
+  MessageSquare,
+  ClipboardList
 } from 'lucide-react'
 
 interface AppShellProps {
@@ -30,6 +31,7 @@ export default function AppShell({ children }: AppShellProps) {
     { name: 'Tools', path: '/tools', icon: Terminal },
     { name: 'Resources', path: '/resources', icon: BookOpen },
     { name: 'Resume Tips', path: '/resume-tips', icon: FileText },
+    { name: 'Cheat Sheet', path: '/cheatsheet', icon: ClipboardList },
     { name: 'Feedback & Rating', path: '/feedback', icon: MessageSquare },
   ]
 

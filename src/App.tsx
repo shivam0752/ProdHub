@@ -7,6 +7,7 @@ import Login from './pages/Login'
 import Resources from './pages/Resources'
 import ResumeTips from './pages/ResumeTips'
 import Feedback from './pages/Feedback'
+import Cheatsheet from './pages/Cheatsheet'
 import Admin from './pages/Admin'
 import AppShell from './components/AppShell'
 
@@ -83,6 +84,7 @@ export default function App() {
         <Route path="/tools" element={<ProtectedRoute><Tools /></ProtectedRoute>} />
         <Route path="/resources" element={<ProtectedRoute><Resources /></ProtectedRoute>} />
         <Route path="/resume-tips" element={<ProtectedRoute><ResumeTips /></ProtectedRoute>} />
+        <Route path="/cheatsheet" element={<ProtectedRoute><Cheatsheet /></ProtectedRoute>} />
         <Route path="/feedback" element={<ProtectedRoute><Feedback /></ProtectedRoute>} />
         
         {/* Admin Route */}

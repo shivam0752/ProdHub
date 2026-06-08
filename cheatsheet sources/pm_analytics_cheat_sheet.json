@@ -1,0 +1,552 @@
+{
+  "title": "PM Analytics Interview Cheat Sheet",
+  "description": "30+ concepts covering metrics, visualizations, statistical tools, product analysis tools, and rapid revision",
+  "sections": {
+    "metrics": [
+      {
+        "name": "DAU",
+        "full_name": "Daily Active Users",
+        "definition": "Count of unique users who perform at least one session or action in a single day.",
+        "when_to_use": "When measuring daily product health, engagement velocity, or impact of a daily-habit feature.",
+        "trigger_words": ["daily active", "daily usage", "day-over-day"],
+        "typical_pm_use_cases": [
+          "Tracking Notification feature launch",
+          "Measuring feed engagement drop",
+          "Gaming products"
+        ],
+        "example_answer": "Instagram's DAU is a north star — if a push notification change drops DAU by 3% next day, we roll back immediately.",
+        "common_mistakes": [
+          "Confusing sessions with users",
+          "Not defining what 'active' means (login vs meaningful action)"
+        ],
+        "related_concepts": ["WAU", "MAU", "DAU/MAU ratio", "Stickiness"]
+      },
+      {
+        "name": "WAU",
+        "full_name": "Weekly Active Users",
+        "definition": "Count of unique users who are active within any rolling 7-day window.",
+        "when_to_use": "For products with weekly natural cadence — work tools, news, B2B SaaS.",
+        "trigger_words": ["weekly", "week over week", "weekly habit"],
+        "typical_pm_use_cases": [
+          "Slack workspace engagement",
+          "Weekly reporting tools",
+          "Project management apps"
+        ],
+        "example_answer": "Notion's WAU/MAU ratio of 0.7 tells us most monthly users actually return weekly — strong retention signal.",
+        "common_mistakes": [
+          "Using calendar weeks instead of rolling 7 days — creates artificial Monday spikes"
+        ],
+        "related_concepts": ["DAU", "MAU", "Retention", "Engagement Rate"]
+      },
+      {
+        "name": "MAU",
+        "full_name": "Monthly Active Users",
+        "definition": "Count of unique users active within a rolling 30-day window.",
+        "when_to_use": "For reporting product scale, investor metrics, or low-frequency products (travel, tax).",
+        "trigger_words": ["monthly active", "user base size", "growth"],
+        "typical_pm_use_cases": [
+          "Exec dashboards",
+          "Fundraising decks",
+          "Churn rate denominator",
+          "Market sizing"
+        ],
+        "example_answer": "Our MAU grew 15% QoQ, but DAU/MAU dropped from 0.4 to 0.3 — users are signing up but not forming habits.",
+        "common_mistakes": [
+          "Treating MAU growth as a success signal without checking DAU/MAU ratio — hides engagement hollowness"
+        ],
+        "related_concepts": ["DAU", "WAU", "Stickiness", "Churn"]
+      },
+      {
+        "name": "Retention",
+        "full_name": "Retention Rate",
+        "definition": "Percentage of users who return and perform a meaningful action after a defined interval post-signup.",
+        "when_to_use": "Whenever product health, long-term value, or feature stickiness is in question.",
+        "trigger_words": ["retention dropped", "users not returning", "churn"],
+        "typical_pm_use_cases": [
+          "D1/D7/D30 retention after onboarding change",
+          "Cohort retention curves",
+          "Feature adoption retention"
+        ],
+        "example_answer": "D30 retention is 22%. Industry benchmark for social apps is 20–25%. Our D7 is strong at 55% but D30 drops sharply — the product hooks users early but loses them in week 2.",
+        "common_mistakes": [
+          "Using login as retained instead of core action",
+          "Not segmenting by acquisition channel",
+          "Ignoring resurrection rate"
+        ],
+        "related_concepts": ["Churn", "Cohort Analysis", "LTV", "DAU/MAU"]
+      },
+      {
+        "name": "Churn",
+        "full_name": "Churn Rate",
+        "definition": "Percentage of users or revenue lost within a defined period, typically monthly or annually.",
+        "when_to_use": "When diagnosing subscription health, predicting revenue impact, or evaluating product-market fit degradation.",
+        "trigger_words": ["users leaving", "cancellations", "subscription drop"],
+        "typical_pm_use_cases": [
+          "SaaS monthly churn",
+          "Mobile app uninstall rate",
+          "Calculating net revenue retention"
+        ],
+        "example_answer": "Monthly churn is 5%. At this rate, we lose ~46% of users annually. We need to cut churn to 2% to hit ARR targets — that means addressing core pain points in week 2.",
+        "common_mistakes": [
+          "Confusing user churn with revenue churn",
+          "Not measuring involuntary churn (payment failures) separately"
+        ],
+        "related_concepts": ["Retention", "LTV", "CAC", "Cohort Analysis"]
+      },
+      {
+        "name": "Conversion Rate",
+        "full_name": "Conversion Rate",
+        "definition": "Percentage of users who complete a desired action out of those who had the opportunity.",
+        "when_to_use": "When analyzing funnels, testing checkout flows, evaluating onboarding, or pricing page changes.",
+        "trigger_words": ["conversion", "drop off", "signup", "purchase"],
+        "typical_pm_use_cases": [
+          "Free-to-paid conversion",
+          "Landing page optimization",
+          "Checkout abandonment",
+          "Trial activation"
+        ],
+        "example_answer": "Our free-to-paid conversion is 3.2%. SaaS benchmark is 2–5%. The bottleneck is step 3 of checkout — 60% of drop-offs happen there. An A/B test on payment form reduced friction and lifted it to 4.1%.",
+        "common_mistakes": [
+          "Reporting aggregate CVR without segmenting by traffic source or device",
+          "Not controlling for seasonality in tests"
+        ],
+        "related_concepts": ["Funnel Analysis", "Activation Rate", "A/B Testing"]
+      },
+      {
+        "name": "Engagement Rate",
+        "full_name": "Engagement Rate",
+        "definition": "Proportion of users performing a specific meaningful action (like, share, comment, click) out of total users exposed.",
+        "when_to_use": "When evaluating content quality, feature adoption, or campaign effectiveness.",
+        "trigger_words": ["engagement", "interaction", "usage depth"],
+        "typical_pm_use_cases": [
+          "Feed post engagement",
+          "In-app feature usage rate",
+          "Email open/click rates"
+        ],
+        "example_answer": "Our feed engagement rate dropped from 18% to 12% after the algorithm change. Breaking it down: likes down 10%, shares down 40% — shares are disproportionately impacted, suggesting the new ranking deprioritizes viral content.",
+        "common_mistakes": [
+          "Treating all engagement equally (a like ≠ a share ≠ a comment)",
+          "Not weighting by event value"
+        ],
+        "related_concepts": ["DAU", "Retention", "Feature Adoption", "North Star Metric"]
+      },
+      {
+        "name": "Activation Rate",
+        "full_name": "Activation Rate",
+        "definition": "Percentage of new signups who reach the 'aha moment' — the first action that predicts long-term retention.",
+        "when_to_use": "When diagnosing onboarding problems or evaluating the impact of an onboarding redesign.",
+        "trigger_words": ["onboarding", "new users", "first value"],
+        "typical_pm_use_cases": [
+          "Twitter: first follow within 24h",
+          "Dropbox: first file upload",
+          "Slack: first message sent"
+        ],
+        "example_answer": "Only 34% of signups complete profile setup — our defined activation event. Data shows activated users have 3x higher D30 retention. Fixing onboarding is our highest-leverage bet this quarter.",
+        "common_mistakes": [
+          "Defining activation as signup (trivially easy) instead of the first meaningful value moment",
+          "Setting it too hard and missing real activation"
+        ],
+        "related_concepts": ["Onboarding Funnel", "Retention", "Conversion Rate", "Aha Moment"]
+      },
+      {
+        "name": "LTV",
+        "full_name": "Lifetime Value",
+        "definition": "Total predicted revenue a customer generates over their entire relationship with the product.",
+        "when_to_use": "When setting CAC targets, justifying growth spend, evaluating customer segments, or pricing decisions.",
+        "trigger_words": ["lifetime value", "customer worth", "unit economics"],
+        "typical_pm_use_cases": [
+          "LTV/CAC ratio analysis",
+          "Segment LTV comparison",
+          "Pricing tier ROI",
+          "Enterprise vs SMB value"
+        ],
+        "example_answer": "LTV = ARPU / churn rate = $40/month ÷ 5% = $800. With CAC at $120, LTV/CAC = 6.7x — healthy. But enterprise segment LTV is $8,000 vs SMB at $400. We should reallocate sales resources.",
+        "common_mistakes": [
+          "Using simple average LTV across segments",
+          "Ignoring time value of money",
+          "Not separating gross margin LTV from revenue LTV"
+        ],
+        "related_concepts": ["CAC", "Churn", "ARPU", "Payback Period"]
+      },
+      {
+        "name": "CAC",
+        "full_name": "Customer Acquisition Cost",
+        "definition": "Total cost spent on sales and marketing divided by the number of new customers acquired in that period.",
+        "when_to_use": "When evaluating channel efficiency, growth sustainability, fundraising projections, or payback period.",
+        "trigger_words": ["acquisition cost", "marketing spend", "growth efficiency"],
+        "typical_pm_use_cases": [
+          "CAC by channel (paid vs organic)",
+          "Blended vs paid CAC",
+          "Payback period analysis"
+        ],
+        "example_answer": "Our blended CAC is $120. Paid CAC is $320 vs organic $40. We're spending heavily on paid but it has 2x higher churn — organic customers are 3x more valuable. Shift budget to SEO and referral.",
+        "common_mistakes": [
+          "Using blended CAC only and missing channel-level efficiency differences",
+          "Including existing customer upsell spend in CAC"
+        ],
+        "related_concepts": ["LTV", "Payback Period", "Channel Attribution", "Unit Economics"]
+      }
+    ],
+    "visualizations": [
+      {
+        "name": "Line Chart",
+        "definition": "Plots a continuous metric over time with data points connected by lines.",
+        "when_to_use": "Any time you're tracking a metric over time — trend, growth, seasonality, or anomaly detection.",
+        "trigger_words": ["trend", "over time", "dropped", "grew"],
+        "typical_pm_use_cases": [
+          "DAU/WAU/MAU trends",
+          "Revenue growth",
+          "Feature usage over time",
+          "Post-launch metric monitoring"
+        ],
+        "example_answer": "I'd plot DAU on a 90-day line chart segmented by platform. The drop becomes visible on Day 14 — it aligns with the iOS update rollout. Line comparison shows Android DAU flat, isolating the iOS bug.",
+        "common_mistakes": [
+          "Not annotating events (launches, outages) on the timeline",
+          "Starting Y-axis above zero to exaggerate changes"
+        ],
+        "related_concepts": ["Retention Curve", "Cohort Chart", "Trend Analysis"]
+      },
+      {
+        "name": "Bar Chart",
+        "definition": "Uses rectangular bars to compare discrete categories or time periods side by side.",
+        "when_to_use": "Comparing values across categories — segments, features, channels, time buckets.",
+        "trigger_words": ["compare", "breakdown", "by segment", "distribution"],
+        "typical_pm_use_cases": [
+          "Revenue by product line",
+          "DAU by geography",
+          "Conversion rate by traffic source",
+          "Feature adoption by user type"
+        ],
+        "example_answer": "I'd use a stacked bar chart showing revenue by subscription tier monthly. The chart reveals that Enterprise revenue grew 40% while SMB declined 10% — informs where to focus sales capacity.",
+        "common_mistakes": [
+          "Using 3D bars (distorts perception)",
+          "Too many categories (>8) makes bars unreadable",
+          "Pie charts instead of bars for comparison"
+        ],
+        "related_concepts": ["Segmentation", "Funnel Chart", "Distribution"]
+      },
+      {
+        "name": "Heatmap",
+        "definition": "Encodes values as color intensity on a 2D grid — typically time vs. day or feature vs. user segment.",
+        "when_to_use": "Finding patterns across two categorical dimensions simultaneously — time patterns, feature usage density.",
+        "trigger_words": ["pattern", "peak times", "usage density", "when do users"],
+        "typical_pm_use_cases": [
+          "Session time-of-day/day-of-week",
+          "Feature engagement matrix by user segment",
+          "Geographic density maps"
+        ],
+        "example_answer": "A 7-day × 24-hour heatmap of sessions shows 80% of activity between Tuesday–Thursday, 9am–6pm. Weekend usage is near zero — this is a pure work tool. Scheduling push notifications on Monday 8am will maximize open rates.",
+        "common_mistakes": [
+          "Using too many color gradients",
+          "Not normalizing values across rows/columns making comparison meaningless"
+        ],
+        "related_concepts": ["User Journey", "Segmentation", "Engagement Rate"]
+      },
+      {
+        "name": "Funnel Chart",
+        "definition": "Visualizes sequential step-by-step drop-off rates through a conversion or user flow.",
+        "when_to_use": "Any time you need to find where users abandon a flow — onboarding, checkout, signup, activation.",
+        "trigger_words": ["drop off", "conversion", "where users leave", "abandonment"],
+        "typical_pm_use_cases": [
+          "Checkout funnel",
+          "Signup flow",
+          "Onboarding activation funnel",
+          "Upgrade funnel",
+          "Search-to-booking flow"
+        ],
+        "example_answer": "Funnel: Homepage (100%) → Signup (42%) → Onboarding step 1 (38%) → Step 2 (21%) → Activation (14%). The 45% drop from step 1 to step 2 is the critical leak. I'd qualitatively investigate with session replays and run an A/B test on simplifying step 2.",
+        "common_mistakes": [
+          "Not accounting for time lag between steps",
+          "Using same-session funnels when users naturally take days between steps"
+        ],
+        "related_concepts": ["Conversion Rate", "Activation Rate", "User Journey", "A/B Testing"]
+      },
+      {
+        "name": "Cohort Chart",
+        "definition": "Groups users by a shared start event (e.g., signup date) and tracks their behavior over time side by side.",
+        "when_to_use": "Comparing retention or behavior across user groups acquired at different times — isolates trend from mix shift.",
+        "trigger_words": ["retention over time", "cohort", "improving", "compare groups"],
+        "typical_pm_use_cases": [
+          "Monthly retention cohort chart",
+          "LTV by acquisition cohort",
+          "Feature adoption by signup month"
+        ],
+        "example_answer": "Cohort chart shows January cohort has 28% D30 retention vs March cohort at 18%. The drop correlates with our pricing change in February — new users are less committed. March cohort also churns faster in week 2.",
+        "common_mistakes": [
+          "Not aligning cohorts by relative time (weeks since signup) instead of absolute calendar time — conflates seasonality with behavior"
+        ],
+        "related_concepts": ["Retention", "Churn", "LTV", "Cohort Analysis"]
+      },
+      {
+        "name": "Scatter Plot",
+        "definition": "Plots two continuous variables as points to reveal correlation, clusters, or outliers.",
+        "when_to_use": "When exploring the relationship between two metrics or identifying user segments with unusual behavior.",
+        "trigger_words": ["correlation", "relationship between", "outliers", "cluster"],
+        "typical_pm_use_cases": [
+          "Session length vs retention",
+          "Feature usage vs LTV",
+          "Support tickets vs churn",
+          "DAU vs revenue per user"
+        ],
+        "example_answer": "Scatter plot of sessions per week vs D30 retention reveals a clear inflection: users with 4+ sessions/week retain at 70%; below that, it drops to 25%. This defines our engagement activation threshold for the north star metric.",
+        "common_mistakes": [
+          "Inferring causation from correlation",
+          "Not labeling outliers that might be data quality issues or distinct segments"
+        ],
+        "related_concepts": ["Regression Analysis", "Segmentation", "Root Cause Analysis"]
+      }
+    ],
+    "statistical_tools": [
+      {
+        "name": "Confidence Interval",
+        "definition": "A range that, with a stated probability (usually 95%), contains the true population parameter.",
+        "when_to_use": "When interpreting A/B test results or metric estimates to communicate certainty to stakeholders.",
+        "trigger_words": ["how confident", "significant", "certain", "margin of error"],
+        "typical_pm_use_cases": [
+          "Reporting A/B test lift with uncertainty",
+          "Estimating DAU range for investor projections",
+          "Retention point estimates"
+        ],
+        "example_answer": "The new checkout flow shows +8% conversion. The 95% CI is [+3%, +13%] — entirely above zero. We can confidently ship. If the CI included zero, we'd need more data.",
+        "common_mistakes": [
+          "Treating a 95% CI as '95% chance the true value is in this range'",
+          "Reporting point estimates without CIs to stakeholders"
+        ],
+        "related_concepts": ["P-value", "A/B Testing", "Sample Size", "Statistical Significance"]
+      },
+      {
+        "name": "P-value",
+        "definition": "The probability of observing a result at least as extreme as the data if the null hypothesis (no effect) were true.",
+        "when_to_use": "When deciding whether an A/B test result is statistically significant and not due to random chance.",
+        "trigger_words": ["significant", "experiment result", "chance", "p-value"],
+        "typical_pm_use_cases": [
+          "Determining if a feature launch moved a metric",
+          "Validating onboarding experiment results"
+        ],
+        "example_answer": "p=0.03 means there's only a 3% probability this result happened by chance under the null. Below our α=0.05 threshold — we reject the null and call it significant. But always pair with effect size — a p=0.001 result with 0.1% lift isn't worth shipping.",
+        "common_mistakes": [
+          "P-hacking (running test until p<0.05)",
+          "Confusing p-value with effect size or practical significance",
+          "Using p<0.05 as a sacred threshold"
+        ],
+        "related_concepts": ["Confidence Interval", "A/B Testing", "Statistical Significance", "Type I/II Error"]
+      },
+      {
+        "name": "A/B Testing",
+        "definition": "A controlled experiment that randomly assigns users to control and treatment groups to measure the causal effect of a change.",
+        "when_to_use": "Whenever you need causal evidence that a product change improves a metric before full rollout.",
+        "trigger_words": ["experiment", "test", "prove", "validate", "rollout"],
+        "typical_pm_use_cases": [
+          "Testing a new onboarding flow",
+          "Checkout redesign",
+          "Pricing page copy",
+          "Notification frequency change"
+        ],
+        "example_answer": "I'd A/B test the new onboarding flow. Primary metric: D7 retention. Guardrail metric: D1 completion rate. Run for 2 weeks, 50/50 split, min 5,000 users per arm for 80% power to detect a 5% lift. Ship if p<0.05 and CI fully above zero.",
+        "common_mistakes": [
+          "Peeking at results before reaching sample size",
+          "Testing multiple variants without correcting for multiple comparisons",
+          "Ignoring novelty effect"
+        ],
+        "related_concepts": ["Sample Size", "Power Analysis", "P-value", "Confidence Interval"]
+      },
+      {
+        "name": "Power Analysis",
+        "definition": "Statistical process to determine the probability of correctly detecting a real effect given sample size, significance level, and effect size.",
+        "when_to_use": "Before running any A/B test — to determine if you have enough traffic to detect the expected effect.",
+        "trigger_words": ["how long to run", "enough traffic", "detect a difference"],
+        "typical_pm_use_cases": [
+          "Planning experiments on low-traffic features",
+          "Deciding if you can detect a 3% vs 10% lift given your DAU"
+        ],
+        "example_answer": "With 2,000 daily users per variant, 80% power, α=0.05, and a baseline conversion of 10%, we can detect a minimum detectable effect of ~2.5%. If we only expect 1% lift, we need 3x the traffic or 3x the time — not worth running.",
+        "common_mistakes": [
+          "Running underpowered tests and concluding 'no effect' from null results",
+          "Setting unrealistically small MDE to reduce sample size requirements"
+        ],
+        "related_concepts": ["A/B Testing", "Sample Size", "Type II Error", "MDE"]
+      },
+      {
+        "name": "Sample Size Calculation",
+        "definition": "Formula to determine the minimum number of observations needed to detect an effect with specified statistical power and significance.",
+        "when_to_use": "At the experiment design phase — before launching any test, to avoid underpowered or wasteful experiments.",
+        "trigger_words": ["how many users", "how long to run", "minimum size"],
+        "typical_pm_use_cases": [
+          "Any A/B test design",
+          "Determining if a feature has enough usage to be testable",
+          "Planning user research sample size"
+        ],
+        "example_answer": "Baseline CVR = 5%, target MDE = 1pp (20% relative lift), α=0.05, power=80%. Each arm needs ~3,800 users. With 500 daily users per arm, that's ~8 days. I'd run for 2 weeks to cover weekly seasonality.",
+        "common_mistakes": [
+          "Ignoring seasonality when calculating runtime from daily traffic",
+          "Not accounting for the fact that you need both arms — doubling the total sample needed"
+        ],
+        "related_concepts": ["A/B Testing", "Power Analysis", "MDE", "Confidence Interval"]
+      },
+      {
+        "name": "Standard Deviation",
+        "definition": "Measures how much individual data points deviate from the mean — quantifies spread or variability in a dataset.",
+        "when_to_use": "When describing the variability of a metric, detecting anomalies, or comparing consistency across segments.",
+        "trigger_words": ["spread", "variability", "anomaly", "unusual", "spike"],
+        "typical_pm_use_cases": [
+          "Detecting DAU anomalies (>2σ spikes)",
+          "Session length variability by user type",
+          "Metric stability monitoring"
+        ],
+        "example_answer": "Our DAU averages 100K with σ=5K. Yesterday's 82K is 3.6 standard deviations below mean — statistically anomalous. This isn't noise; something broke. I'd check for data pipeline failures, app crashes, or a major competitor launch.",
+        "common_mistakes": [
+          "Reporting mean without standard deviation — hides whether the mean is meaningful or driven by outliers"
+        ],
+        "related_concepts": ["Variance", "Confidence Interval", "Anomaly Detection", "Z-score"]
+      },
+      {
+        "name": "Variance",
+        "definition": "The square of standard deviation — average of squared differences from the mean; measures dispersion in a dataset.",
+        "when_to_use": "In statistical modeling, comparing metric consistency across groups, or understanding signal-to-noise ratio.",
+        "trigger_words": ["consistent", "stable", "variability", "noisy metric"],
+        "typical_pm_use_cases": [
+          "Comparing engagement metric stability across user segments",
+          "Assessing whether a metric is reliable enough to use as a north star"
+        ],
+        "example_answer": "Retention variance is high for new users (σ²=120) but low for power users (σ²=8). The new user segment is too unpredictable to use D7 retention as a reliable experiment metric — I'd use activation rate instead which has lower variance and faster signal.",
+        "common_mistakes": [
+          "Confusing variance with standard deviation in communication — always convert to SD for stakeholder-facing communication"
+        ],
+        "related_concepts": ["Standard Deviation", "A/B Testing", "Metric Reliability"]
+      }
+    ],
+    "product_analysis_tools": [
+      {
+        "name": "Cohort Analysis",
+        "question_it_answers": "Are newer users behaving differently than older users, and is product quality improving over time?",
+        "graph_used": "Cohort retention grid (heatmap with weeks on X-axis, cohort on Y-axis) or multi-line retention curve.",
+        "pm_insight_generated": "Separates product improvement signal from mix shift. If Jan cohort retains at 35% and Jun cohort at 22%, product regression happened — not just seasonality.",
+        "example": "June cohort has significantly lower D30 retention. It coincides with the new onboarding flow. Either the new flow is worse, or we changed acquisition channels and brought in lower-intent users — segment to disentangle."
+      },
+      {
+        "name": "Funnel Analysis",
+        "question_it_answers": "Where exactly are users abandoning a critical flow, and what is the magnitude of loss at each step?",
+        "graph_used": "Funnel chart (stepped bar chart showing absolute and % drop-off at each stage).",
+        "pm_insight_generated": "Quantifies the revenue/retention impact of each bottleneck, enabling prioritization by expected lift.",
+        "example": "Of 10K users who start checkout, 4K complete it. The biggest drop (40%) is at payment entry. Fixing payment UX could recover ~$200K/month in revenue assuming average order value."
+      },
+      {
+        "name": "Retention Analysis",
+        "question_it_answers": "How many users return after their first session, and at what rate do they form a habit?",
+        "graph_used": "Retention curve (line chart: day N on X, % retained on Y) or cohort grid.",
+        "pm_insight_generated": "Identifies if the product has achieved product-market fit (flattening curve) or continues to lose all users (curve hits zero). Reveals the 'retention ceiling.'",
+        "example": "D1=55%, D7=30%, D30=18%, D90=15% — the curve flattens after D30. 15% of users form a durable habit. Focus on moving the D7→D30 slope, not just D1."
+      },
+      {
+        "name": "Segmentation",
+        "question_it_answers": "Which user groups behave differently, and which segments drive the most value or churn?",
+        "graph_used": "Bar charts comparing metric by segment; scatter plots coloring by segment; distribution histograms.",
+        "pm_insight_generated": "Reveals that aggregate metrics hide opposing trends in subgroups. Power users mask new user struggles. Mobile vs web, geography, plan tier — each may tell a different story.",
+        "example": "Overall DAU flat, but breaking by platform: web DAU down 20%, mobile DAU up 35%. The product is shifting to mobile-first and we're optimizing the wrong surface."
+      },
+      {
+        "name": "Root Cause Analysis",
+        "question_it_answers": "What caused a metric to move — was it a product change, data issue, external factor, or user behavior shift?",
+        "graph_used": "Time series with event annotations; decomposition charts; segmented line charts to isolate the variable.",
+        "pm_insight_generated": "Prevents wrong conclusions and wasted engineering cycles. Forces PMs to separate correlation from causation before acting.",
+        "example": "DAU dropped 12% on Thursday. Step 1: rule out data pipeline issues. Step 2: check if correlated with a specific deployment. Step 3: segment by platform — iOS DAU dropped 25%, Android flat. Step 4: iOS build pushed Wednesday — likely culprit. Hot-fix first, analyze second."
+      },
+      {
+        "name": "Churn Analysis",
+        "question_it_answers": "Who churns, when do they churn, and what behavioral signals predict churn before it happens?",
+        "graph_used": "Survival curves; churn by cohort heatmap; feature usage comparison (churned vs retained users).",
+        "pm_insight_generated": "Identifies the behavioral leading indicators of churn enabling proactive intervention.",
+        "example": "Churned users had an average of 1.2 sessions in their last 2 weeks vs 6.4 for retained users. If we flag users below 2 sessions/week and trigger a re-engagement email, we can intervene at-risk users before they cancel."
+      },
+      {
+        "name": "User Journey Mapping",
+        "question_it_answers": "What is the actual path users take through the product, where do they deviate, and where do they get stuck?",
+        "graph_used": "Sankey diagram; flow chart; path analysis showing common routes with edge weights.",
+        "pm_insight_generated": "Reveals unintended high-traffic paths, navigation dead ends, and the gap between designed flows and actual user behavior.",
+        "example": "40% of users navigate from Home → Settings → Back to Home without completing any action. This 'dead loop' suggests confusion about the IA. They're looking for something they can't find — time for a card sort and IA audit."
+      }
+    ],
+    "top_20_concepts": [
+      { "rank": 1, "concept": "North Star Metric", "insight": "Every PM interview question eventually needs one. Know your product's core value delivery metric." },
+      { "rank": 2, "concept": "DAU/MAU Ratio (Stickiness)", "insight": "Signals habit formation. Above 0.5 = strong daily habit. Below 0.2 = weak engagement despite large user base." },
+      { "rank": 3, "concept": "Retention Curve Shape", "insight": "Flattening curve = PMF. Asymptotic to zero = no PMF. The shape matters more than the absolute number." },
+      { "rank": 4, "concept": "Funnel Drop-off Analysis", "insight": "Always find the biggest drop as a percentage, multiply by value, and prioritize highest-impact bottleneck." },
+      { "rank": 5, "concept": "A/B Testing Framework", "insight": "Hypothesis → Primary metric + guardrails → Sample size → Runtime → Ship decision based on CI, not just p-value." },
+      { "rank": 6, "concept": "LTV/CAC Ratio", "insight": "Minimum 3x for SaaS. Below 1x = unsustainable. Above 5x = under-investing in growth." },
+      { "rank": 7, "concept": "Cohort vs Aggregate Metrics", "insight": "Never trust aggregate metrics alone. Cohorts reveal if product quality is improving or mix shift is masking problems." },
+      { "rank": 8, "concept": "Confidence Interval Over P-value", "insight": "CIs show magnitude and direction of effect. P-values only show statistical significance — not practical importance." },
+      { "rank": 9, "concept": "Segmentation Before Conclusions", "insight": "Always segment before diagnosing. Platform, geography, user tenure, and acquisition channel tell different stories." },
+      { "rank": 10, "concept": "Activation Rate as Leading Indicator", "insight": "Activation predicts long-term retention. It's your fastest leading indicator — D1 actions predict D30 outcomes." },
+      { "rank": 11, "concept": "Root Cause Analysis (5 Whys)", "insight": "Metric drops need structured investigation: rule out data issues, segment to isolate, correlate with events." },
+      { "rank": 12, "concept": "Guardrail Metrics", "insight": "Never optimize a primary metric without defining what you won't sacrifice. Guardrails prevent Goodhart's Law." },
+      { "rank": 13, "concept": "User vs Revenue Churn", "insight": "User churn hides expansion revenue. Revenue churn (net) is the real health signal — negative NRR is a crisis." },
+      { "rank": 14, "concept": "Sample Size Before Experiment", "insight": "Underpowered tests produce false negatives. Always calculate MDE and required n before running, not after." },
+      { "rank": 15, "concept": "Standard Deviation for Anomalies", "insight": "A metric 2+ SDs from mean warrants investigation. 3+ SDs = likely real signal, not noise." },
+      { "rank": 16, "concept": "Heatmaps for Temporal Patterns", "insight": "When behavior patterns is the question, a day-hour heatmap reveals usage clusters that line charts miss." },
+      { "rank": 17, "concept": "Churn Behavioral Predictors", "insight": "Identify behavioral leading indicators of churn — low session frequency, feature abandonment — and intervene proactively." },
+      { "rank": 18, "concept": "Scatter Plot for Thresholds", "insight": "Sessions/week vs retention scatter plot reveals the engagement threshold that predicts retained vs churned users." },
+      { "rank": 19, "concept": "Sankey / Path Analysis", "insight": "The actual user path in your product is always different from the designed one. Path analysis reveals real behavior." },
+      { "rank": 20, "concept": "Payback Period", "insight": "CAC ÷ Monthly Gross Margin. Under 12 months is healthy for SaaS. Critical for capital efficiency narrative." }
+    ],
+    "if_x_then_y_triggers": [
+      { "interviewer_says": "Users are dropping off", "use": ["Funnel Analysis", "Funnel Chart", "Conversion Rate", "Session Replay"] },
+      { "interviewer_says": "Retention dropped", "use": ["Cohort Analysis", "Confidence Interval", "Segmentation", "Root Cause Analysis"] },
+      { "interviewer_says": "Run an experiment / test a feature", "use": ["A/B Testing", "Sample Size Calculation", "Power Analysis", "Guardrail Metrics"] },
+      { "interviewer_says": "Metric anomaly / sudden spike or drop", "use": ["Standard Deviation", "Root Cause Analysis", "Segmentation", "Annotated Line Chart"] },
+      { "interviewer_says": "Users are churning", "use": ["Churn Analysis", "Cohort Chart", "Behavioral Predictors", "LTV Impact"] },
+      { "interviewer_says": "How healthy is the product?", "use": ["DAU/MAU Ratio", "Retention Curve", "LTV/CAC", "North Star Metric"] },
+      { "interviewer_says": "New feature performing well?", "use": ["Adoption Rate", "A/B Test Results", "Engagement Rate", "Retention Impact"] },
+      { "interviewer_says": "Where should we focus?", "use": ["Funnel Analysis", "Segmentation", "Impact × Effort", "LTV by Segment"] },
+      { "interviewer_says": "Growth is slowing", "use": ["CAC by Channel", "MAU Trend", "Activation Rate", "Cohort Comparison"] },
+      { "interviewer_says": "Are these groups different?", "use": ["Segmentation", "Statistical Test", "Confidence Interval", "Bar Chart Comparison"] },
+      { "interviewer_says": "Onboarding isn't working", "use": ["Activation Rate", "Funnel Chart", "D1/D7 Retention", "Session Heatmap"] },
+      { "interviewer_says": "Is this result real or noise?", "use": ["P-value", "Confidence Interval", "Standard Deviation", "Sample Size Review"] },
+      { "interviewer_says": "What does user behavior look like?", "use": ["User Journey Map", "Path Analysis", "Heatmap", "Sankey Diagram"] },
+      { "interviewer_says": "Is growth sustainable?", "use": ["LTV/CAC", "Payback Period", "Churn Rate", "Net Revenue Retention"] },
+      { "interviewer_says": "Which segment should we target?", "use": ["Segmentation", "LTV by Segment", "Scatter Plot", "Churn by Segment"] },
+      { "interviewer_says": "When do users engage most?", "use": ["Heatmap (day × hour)", "DAU Trend", "Notification Timing"] }
+    ],
+    "rapid_revision": {
+      "key_formulas": [
+        { "label": "Stickiness", "formula": "DAU ÷ MAU", "benchmark": "Above 0.5 = strong habit. Below 0.2 = weak engagement." },
+        { "label": "Churn Rate", "formula": "Users lost ÷ Users at start × 100", "benchmark": "Monthly churn of 5% = ~46% annual loss." },
+        { "label": "LTV", "formula": "ARPU ÷ Monthly Churn Rate", "benchmark": "Or: ARPU × Gross Margin × Average Customer Lifespan." },
+        { "label": "LTV/CAC Target", "formula": "LTV ÷ CAC", "benchmark": "Minimum 3x for SaaS. Below 1x = unsustainable. Above 5x = under-investing." },
+        { "label": "Payback Period", "formula": "CAC ÷ Monthly Gross Margin per Customer", "benchmark": "Under 12 months = healthy SaaS. Over 18 = capital efficiency risk." },
+        { "label": "Confidence Level", "formula": "1 - α", "benchmark": "Industry standard: 95% (α=0.05). CI excludes zero → statistically significant." },
+        { "label": "Statistical Power", "formula": "1 - β", "benchmark": "Standard: 80%. Probability of detecting a real effect when it exists." },
+        { "label": "Anomaly Threshold", "formula": "Metric vs Mean ± nσ", "benchmark": "2σ = investigate. 3σ = almost certainly real signal." }
+      ],
+      "retention_benchmarks": {
+        "consumer_social_apps": "D30: 20–25%",
+        "saas": "D30: 50–70%",
+        "gaming": "D30: 10–15%",
+        "pmf_signal": "Flattening retention curve = product-market fit achieved"
+      },
+      "pm_answer_structure": [
+        { "step": 1, "label": "Clarify", "action": "What product? What time window? What metric baseline?" },
+        { "step": 2, "label": "Segment", "action": "Platform, geography, tenure, acquisition channel." },
+        { "step": 3, "label": "Hypothesize", "action": "3–4 possible causes ranked by probability." },
+        { "step": 4, "label": "Validate", "action": "Which tool and visualization would confirm or deny each?" },
+        { "step": 5, "label": "Recommend", "action": "Data-backed action with expected impact and how to measure success." }
+      ],
+      "chart_selection_guide": [
+        { "goal": "Show change over time", "use": "Line Chart" },
+        { "goal": "Compare categories", "use": "Bar Chart" },
+        { "goal": "Find where users drop", "use": "Funnel Chart" },
+        { "goal": "Track retention by group", "use": "Cohort Chart / Retention Curve" },
+        { "goal": "Show 2D density / time patterns", "use": "Heatmap" },
+        { "goal": "Find correlation / outliers", "use": "Scatter Plot" },
+        { "goal": "Show user path / flow", "use": "Sankey Diagram" }
+      ],
+      "golden_rules": [
+        "Correlation ≠ Causation. Only A/B tests establish causal effect.",
+        "Every A/B test needs 1 primary metric + 2 guardrails. Optimizing one metric shouldn't break another.",
+        "Never report aggregate metrics without segmentation. Platform, geography, and tenure tell different stories.",
+        "Drop-off priority = biggest drop% × average value. Fix the highest revenue leak first.",
+        "Underpowered tests produce false negatives. Always calculate sample size before running.",
+        "p<0.05 without effect size is meaningless. A tiny lift with p=0.001 is still not worth shipping."
+      ]
+    }
+  }
+}

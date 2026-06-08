@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
-import { Terminal, BookOpen, FileText, ArrowRight, Info, Award } from 'lucide-react'
+import { Terminal, BookOpen, FileText, ArrowRight, Info, Award, ClipboardList } from 'lucide-react'
 import LiveCount from '../components/LiveCount'
 import StarRating from '../components/StarRating'
 
@@ -28,7 +28,7 @@ export default function Home() {
       </section>
 
       {/* Grid Quick Navigation Actions */}
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-3">
+      <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
         {/* Tools panel card */}
         <div className="bg-neutral-0 border border-neutral-200 p-5 flex flex-col justify-between hover:border-brand-accent hover:shadow-[0_0_0_3px_rgba(37,99,235,0.08)] hover:translate-y-[-1px] transition-all duration-base rounded-card">
           <div className="space-y-3">
@@ -85,6 +85,26 @@ export default function Home() {
             className="mt-6 flex items-center gap-1.5 text-[13px] font-display font-semibold text-brand-accent hover:text-brand-navy transition-colors duration-fast"
           >
             <span>Read Resume Tips</span>
+            <ArrowRight size={14} />
+          </Link>
+        </div>
+
+        {/* Cheat Sheet card */}
+        <div className="bg-neutral-0 border border-neutral-200 p-5 flex flex-col justify-between hover:border-brand-accent hover:shadow-[0_0_0_3px_rgba(37,99,235,0.08)] hover:translate-y-[-1px] transition-all duration-base rounded-card">
+          <div className="space-y-3">
+            <div className="w-9 h-9 bg-[#F0FDF4] rounded-[8px] flex items-center justify-center text-[#15803D] border-[0.5px] border-[#BBF7D0]">
+              <ClipboardList size={18} />
+            </div>
+            <h3 className="font-display font-bold text-[15px] text-neutral-900">Cheat Sheet</h3>
+            <p className="text-[13px] text-neutral-600 leading-relaxed">
+              30+ analytics concepts at a glance — metrics, visualizations, A/B testing, and the APM Core 6 interview stack.
+            </p>
+          </div>
+          <Link
+            to="/cheatsheet"
+            className="mt-6 flex items-center gap-1.5 text-[13px] font-display font-semibold text-brand-accent hover:text-brand-navy transition-colors duration-fast"
+          >
+            <span>Open Cheat Sheet</span>
             <ArrowRight size={14} />
           </Link>
         </div>
