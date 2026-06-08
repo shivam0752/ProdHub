@@ -567,7 +567,25 @@ export default function Cheatsheet() {
               <span className="w-1.5 h-1.5 rounded-full bg-brand-positive animate-pulse-dot" />
               APM / PM (0–2 YEARS)
             </div>
-                {/* APM MODAL OVERLAY (Centered in the middle, covering cheatsheet info) */}
+            <h2 className="text-[16px] font-display font-extrabold text-white leading-tight group-hover:text-brand-punch transition-colors duration-fast">
+              APM Core 6 Stack
+            </h2>
+            <p className="text-[11px] text-white/60 leading-relaxed">
+              Covers ~85% of what APM interviews actually test. Click to expand full details, practice questions, and download as PDF.
+            </p>
+            <div className="flex flex-wrap gap-1.5 pt-1.5">
+              <Badge color="green">FAANG</Badge>
+              <Badge color="amber">Startup</Badge>
+              <Badge color="blue">SaaS</Badge>
+            </div>
+            <div className="text-[11px] font-mono text-brand-punch font-semibold pt-2 flex items-center gap-1 group-hover:translate-x-1 transition-transform duration-fast">
+              Expand Full Details →
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      {/* APM MODAL OVERLAY (Centered in the middle, covering cheatsheet info) */}
       {isApmFullscreen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-10 bg-neutral-900/60 backdrop-blur-sm apm-modal-backdrop">
           <div className="w-full max-w-5xl max-h-[85vh] bg-[#0B1E36] text-white rounded-card border border-white/10 flex flex-col shadow-2xl animate-fade-in relative apm-fullscreen-modal overflow-hidden">
