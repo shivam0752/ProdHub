@@ -13,7 +13,6 @@ import {
   BookOpen,
   Layers,
   Hash,
-  ArrowLeft,
   Printer,
   X,
 } from 'lucide-react'
