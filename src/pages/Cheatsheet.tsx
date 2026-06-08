@@ -3,7 +3,6 @@ import {
   BarChart2,
   TrendingUp,
   FlaskConical,
-  Users,
   Star,
   Zap,
   ChevronDown,
